@@ -3,11 +3,9 @@ import React from "react";
 // import './App.css';
 import MyHeader from './MyHeader';
 import MyFooter from "./MyFooter";
+import Counter from "./Counter";
 
 function App() {
-  const name = 'Choi Doorim';
-  const num = 5;
-
   const Style = {
     App : {
       backgroundColor: 'black',
@@ -21,10 +19,11 @@ function App() {
   }
 
   return (
-    <div style={Style.App}>
+    <div>
       <MyHeader />
-      <h2 style={Style.h2}>Hello React {name}</h2>
-      <b id='bold_text' style={Style.bold_text}> React.JS / {num} : {num % 2 === 0 ? '짝수' : '홀수'}  </b>
+      {/*<h2 style={Style.h2}>Hello React {name}</h2>*/}
+      {/*<b id='bold_text' style={Style.bold_text}> React.JS / {num} : {num % 2 === 0 ? '짝수' : '홀수'}  </b>*/}
+      <Counter/>
       <MyFooter />
     </div>
   );
