@@ -1,19 +1,27 @@
-.App{
-  background-color: black;
+.DiaryEditor {
+  border: 1px solid grey;
+  text-align: center;
+  padding: 20px;
 }
 
-h2 {
-  color: white;
+.DiaryEditor input, textarea {
+  margin-bottom: 20px;
+  width: 500px;
+  padding: 10px;
 }
 
-header {
-  color: white;
+.DiaryEditor textarea {
+  height: 150px;
 }
 
-#bold_text {
-  color: green;
+.DiaryEditor select{
+  width: 300px;
+  padding: 10px;
+  margin-bottom: 20px;
 }
 
-footer {
-  color: red;
+.DiaryEditor button {
+  width: 500px;
+  padding: 10px;
+  cursor: pointer;
 }
