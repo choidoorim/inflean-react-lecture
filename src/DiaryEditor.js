@@ -1,12 +1,12 @@
 import { useState, useRef } from "react";
 
-const DiaryEditor = () => {
+const DiaryEditor = ({ onCreate }) => {
   const authorInput = useRef();
   const contentsInput = useRef();
 
   const [state, setState] = useState({
-    author: "choi",
-    contents: "Contents",
+    author: "작성자",
+    contents: "내용",
     emotion: 1,
   });
 
@@ -27,8 +27,17 @@ const DiaryEditor = () => {
       contentsInput.current.focus();
       return;
     }
-    console.log(state.author, state.contents, state.emotion);
+    onCreate({
+      author: state.author,
+      contents: state.contents,
+      emotion: state.emotion,
+    });
     alert("저장 성공");
+    setState({
+      author: "작성자",
+      contents: "내용",
+      emotion: 1,
+    });
   };
 
   return (
