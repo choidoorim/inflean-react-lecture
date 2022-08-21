@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import DiaryItem from "./DiaryItem";
 
 const DiaryList = ({ diaryList, onDelete, onEdit }) => {

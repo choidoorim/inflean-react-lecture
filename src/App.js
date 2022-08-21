@@ -1,37 +1,34 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./App.css";
 import DiaryEditor from "./DiaryEditor";
 import DiaryList from "./DiaryList";
-import LifeCycle from "./LifeCycle";
 
-// const diaryList = [
-//   {
-//     id: 1,
-//     author: "최두림",
-//     emotion: 1,
-//     contents: "test",
-//     createdAt: new Date().getTime(),
-//   },
-//   {
-//     id: 2,
-//     author: "최두림2",
-//     emotion: 3,
-//     contents: "test1",
-//     createdAt: new Date().getTime(),
-//   },
-//   {
-//     id: 3,
-//     author: "최두림3",
-//     emotion: 2,
-//     contents: "test2",
-//     createdAt: new Date().getTime(),
-//   },
-// ];
-// const diaryList = undefined;
-
+// https://jsonplaceholder.typicode.com/comments
 function App() {
   const [diary, setDiary] = useState([]);
   const diaryId = useRef(0);
+
+  const getCommentData = async () => {
+    const response = await fetch(
+      "https://jsonplaceholder.typicode.com/comments"
+    ).then((res) => res.json());
+
+    const data = response.slice(0, 20).map((it) => {
+      return {
+        author: it.email,
+        contents: it.body,
+        emotion: 1,
+        createdAt: new Date().getTime(),
+        id: it.id,
+      };
+    });
+
+    setDiary(data);
+  };
+
+  useEffect(() => {
+    getCommentData();
+  }, []);
 
   const onCreate = ({ author, contents, emotion }) => {
     const createdAt = new Date().getTime();
@@ -62,7 +59,6 @@ function App() {
 
   return (
     <div className="App">
-      <LifeCycle />
       <DiaryEditor onCreate={onCreate} />
       <DiaryList onDelete={onDelete} onEdit={onEdit} diaryList={diary} />
     </div>
