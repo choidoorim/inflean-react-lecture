@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import "./App.css";
 import DiaryEditor from "./DiaryEditor";
 import DiaryList from "./DiaryList";
@@ -17,7 +17,7 @@ function App() {
       return {
         author: it.email,
         contents: it.body,
-        emotion: 1,
+        emotion: Math.floor(Math.random() * 5) + 1,
         createdAt: new Date().getTime(),
         id: it.id,
       };
@@ -57,8 +57,23 @@ function App() {
     );
   };
 
+  const getDiaryAnalysis = useMemo(() => {
+    console.log("일기 분석 시작!");
+
+    const goodCount = diary.filter((it) => it.emotion >= 3).length;
+    const badCount = diary.length - goodCount;
+    const goodRatio = (goodCount / diary.length) * 100;
+    return { goodCount, badCount, goodRatio };
+  }, [diary.length]);
+
+  const { goodCount, badCount, goodRatio } = getDiaryAnalysis;
+
   return (
     <div className="App">
+      <div>전체 일기: {diary.length}</div>
+      <div>기분 좋은 일기 개수: {goodCount}</div>
+      <div>기분 나쁜 일기 개수: {badCount}</div>
+      <div>비율: {goodRatio}</div>
       <DiaryEditor onCreate={onCreate} />
       <DiaryList onDelete={onDelete} onEdit={onEdit} diaryList={diary} />
     </div>
