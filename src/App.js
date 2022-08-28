@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useMemo } from "react";
 import "./App.css";
 import DiaryEditor from "./DiaryEditor";
 import DiaryList from "./DiaryList";
+import OptimizeTest from "./OptimizeTest";
 
 // https://jsonplaceholder.typicode.com/comments
 function App() {
@@ -44,7 +45,6 @@ function App() {
   };
 
   const onDelete = (diaryId) => {
-    console.log(`${diaryId} 를 삭제합니다`);
     const newDiaryList = diary.filter((data) => data.id !== diaryId);
     setDiary(newDiaryList);
   };
@@ -58,8 +58,6 @@ function App() {
   };
 
   const getDiaryAnalysis = useMemo(() => {
-    console.log("일기 분석 시작!");
-
     const goodCount = diary.filter((it) => it.emotion >= 3).length;
     const badCount = diary.length - goodCount;
     const goodRatio = (goodCount / diary.length) * 100;
@@ -70,10 +68,20 @@ function App() {
 
   return (
     <div className="App">
+      <OptimizeTest />
       <div>전체 일기: {diary.length}</div>
       <div>기분 좋은 일기 개수: {goodCount}</div>
       <div>기분 나쁜 일기 개수: {badCount}</div>
       <div>비율: {goodRatio}</div>
+      <div>
+        <a
+          href="http://localhost:3000/v1/oauth/kakao"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <button>Click</button>
+        </a>
+      </div>
       <DiaryEditor onCreate={onCreate} />
       <DiaryList onDelete={onDelete} onEdit={onEdit} diaryList={diary} />
     </div>
