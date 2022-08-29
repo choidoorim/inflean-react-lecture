@@ -1,8 +1,16 @@
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useMemo,
+  useCallback,
+} from "react";
 import "./App.css";
 import DiaryEditor from "./DiaryEditor";
 import DiaryList from "./DiaryList";
 import OptimizeTest from "./OptimizeTest";
+
+export const DiaryStateContext = React.createContext();
 
 // https://jsonplaceholder.typicode.com/comments
 function App() {
@@ -31,7 +39,7 @@ function App() {
     getCommentData();
   }, []);
 
-  const onCreate = ({ author, contents, emotion }) => {
+  const onCreate = useCallback(({ author, contents, emotion }) => {
     const createdAt = new Date().getTime();
     const newItem = {
       id: diaryId.current,
@@ -41,13 +49,12 @@ function App() {
       createdAt,
     };
     diaryId.current += 1;
-    setDiary([newItem, ...diary]);
-  };
+    setDiary((diary) => [newItem, ...diary]);
+  }, []);
 
-  const onDelete = (diaryId) => {
-    const newDiaryList = diary.filter((data) => data.id !== diaryId);
-    setDiary(newDiaryList);
-  };
+  const onDelete = useCallback((diaryId) => {
+    setDiary((diary) => diary.filter((data) => data.id !== diaryId));
+  }, []);
 
   const onEdit = (diaryId, newContents) => {
     setDiary(
@@ -67,24 +74,27 @@ function App() {
   const { goodCount, badCount, goodRatio } = getDiaryAnalysis;
 
   return (
-    <div className="App">
-      <OptimizeTest />
-      <div>전체 일기: {diary.length}</div>
-      <div>기분 좋은 일기 개수: {goodCount}</div>
-      <div>기분 나쁜 일기 개수: {badCount}</div>
-      <div>비율: {goodRatio}</div>
-      <div>
-        <a
-          href="http://localhost:3000/v1/oauth/kakao"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button>Click</button>
-        </a>
+    <DiaryStateContext.Provider value={diary}>
+      <div className="App">
+        <OptimizeTest />
+        <div>전체 일기: {diary.length}</div>
+        <div>기분 좋은 일기 개수: {goodCount}</div>
+        <div>기분 나쁜 일기 개수: {badCount}</div>
+        <div>비율: {goodRatio}</div>
+        <div>
+          <a
+            href="http://localhost:3000/v1/oauth/kakao"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <button>Click</button>
+          </a>
+        </div>
+        <DiaryEditor onCreate={onCreate} />
+        {/* <DiaryList onDelete={onDelete} onEdit={onEdit} diaryList={diary} /> */}
+        <DiaryList onDelete={onDelete} onEdit={onEdit} />
       </div>
-      <DiaryEditor onCreate={onCreate} />
-      <DiaryList onDelete={onDelete} onEdit={onEdit} diaryList={diary} />
-    </div>
+    </DiaryStateContext.Provider>
   );
 }
 
